@@ -111,8 +111,8 @@ class AuthService(BaseService):
         if token_record is None:
             raise IncorrectTokenException
 
-        await self.db.refresh_tokens.revoke_token(hashed)
-        await self.db.refresh_tokens.delete_expired_tokens(token_record.user_id)
+        # Удаляем все токены пользователя перед созданием нового
+        await self.db.refresh_tokens.delete_all_user_tokens(token_record.user_id)
 
         new_access = self.create_access_token({"user_id": token_record.user_id})
         new_raw_refresh = self._generate_refresh_token()
