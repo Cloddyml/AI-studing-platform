@@ -5,6 +5,7 @@ from app.models.tasks import TasksOrm
 from app.models.topics import TopicsOrm
 from app.models.users import UsersOrm
 from app.models.users_progresses import UsersProgressesOrm
+from app.models.ai_interactions import AIInteractionsOrm
 
 __all__ = [
     "UsersOrm",
@@ -14,4 +15,5 @@ __all__ = [
     "UsersProgressesOrm",
     "SolutionsOrm",
     "SubmissionsOrm",
+    "AIInteractionsOrm",
 ]
