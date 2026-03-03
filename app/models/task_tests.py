@@ -1,7 +1,6 @@
 import typing
-from datetime import datetime
 
-from sqlalchemy import Boolean, Integer, String, Text, text
+from sqlalchemy import Boolean, ForeignKey, Integer, Text, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -15,7 +14,7 @@ class TaskTestsOrm(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(
-        String(length=255), unique=True, nullable=False
+        Integer, ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False
     )
     test_code: Mapped[str] = mapped_column(Text, nullable=False)
     is_hidden: Mapped[bool] = mapped_column(
@@ -25,4 +24,4 @@ class TaskTestsOrm(Base):
         Integer, nullable=False, server_default=text("0")
     )
 
-    tasks: Mapped["TasksOrm"] = relationship(back_populates="task_tests")
+    task: Mapped["TasksOrm"] = relationship(back_populates="task_tests")

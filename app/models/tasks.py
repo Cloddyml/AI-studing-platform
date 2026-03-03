@@ -37,8 +37,8 @@ class TasksOrm(Base):
         nullable=False, server_default=text("now()")
     )
 
-    topics: Mapped["TopicsOrm"] = relationship(back_populates="tasks")
+    topic: Mapped["TopicsOrm"] = relationship(back_populates="tasks")
     task_tests: Mapped[list["TaskTestsOrm"]] = relationship(
-        back_populates="tasks",
+        back_populates="task",
         cascade="all, delete-orphan",
     )

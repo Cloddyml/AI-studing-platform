@@ -28,6 +28,6 @@ class TopicsOrm(Base):
     )
 
     tasks: Mapped[list["TasksOrm"]] = relationship(
-        back_populates="topics",
+        back_populates="topic",
         cascade="all, delete-orphan",
     )
