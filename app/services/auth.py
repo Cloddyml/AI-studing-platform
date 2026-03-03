@@ -16,7 +16,7 @@ from app.exceptions.excs import (
     UserNotFoundException,
 )
 from app.schemas.refresh_tokens import RefreshTokenAddDTO
-from app.schemas.users import UserAddDTO, UserRequestAddDTO
+from app.schemas.users import UserAddDTO, UserLoginDTO, UserRequestAddDTO
 from app.services.base import BaseService
 
 
@@ -83,7 +83,7 @@ class AuthService(BaseService):
         except ObjectAlreadyExistsException as ex:
             raise UserAlreadyExistsException from ex
 
-    async def login_user(self, data: UserRequestAddDTO) -> tuple[str, str]:
+    async def login_user(self, data: UserLoginDTO) -> tuple[str, str]:
         """Вернуть (access_token, refresh_token)."""
         user = await self.db.users.get_user_with_hashed_password(email=data.email)
         if not user:

@@ -1,20 +1,39 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, status
 
 from app.api.deps.auth import get_refresh_token
 from app.api.deps.db import DBDep
+from app.api.responses import generate_responses
 from app.core.config import settings
-from app.exceptions.excs import UserAlreadyExistsException, UserNotFoundException
+from app.exceptions.excs import (
+    EmailNotRegisteredException,
+    IncorrectPasswordException,
+    IncorrectTokenException,
+    UserAlreadyExistsException,
+    UserNotFoundException,
+)
 from app.exceptions.http_excs import (
+    AlreadyAuthenticatedHTTPException,
+    AlreadyLoggedOutHTTPException,
+    EmailNotRegisteredHTTPException,
+    IncorrectPasswordHTTPException,
+    IncorrectTokenHTTPException,
     UserAlreadyExistsHTTPException,
     UserNotFoundHTTPException,
 )
-from app.schemas.users import UserRequestAddDTO
+from app.schemas.errors import StatusResponse
+from app.schemas.users import UserLoginDTO, UserRequestAddDTO
 from app.services.auth import AuthService
 
 router = APIRouter(prefix="/auth", tags=["Авторизация и аутентификация"])
 
 
-@router.post("/register")
+@router.post(
+    "/register",
+    response_model=StatusResponse,
+    status_code=status.HTTP_201_CREATED,
+    responses=generate_responses(UserAlreadyExistsHTTPException),
+    summary="Регистрация пользователя",
+)
 async def register_user(
     db: DBDep,
     data: UserRequestAddDTO,
@@ -27,13 +46,30 @@ async def register_user(
     return {"status": "OK"}
 
 
-@router.post("/login")
+@router.post(
+    "/login",
+    response_model=StatusResponse,
+    responses=generate_responses(
+        AlreadyAuthenticatedHTTPException,
+        EmailNotRegisteredHTTPException,
+        IncorrectPasswordHTTPException,
+    ),
+    summary="Аутентификация пользователя",
+)
 async def login(
-    data: UserRequestAddDTO,
+    request: Request,
+    data: UserLoginDTO,
     response: Response,
     db: DBDep,
 ):
-    access_token, refresh_token = await AuthService(db).login_user(data)
+    if request.cookies.get("access_token"):
+        raise AlreadyAuthenticatedHTTPException
+    try:
+        access_token, refresh_token = await AuthService(db).login_user(data)
+    except EmailNotRegisteredException:
+        raise EmailNotRegisteredHTTPException
+    except IncorrectPasswordException:
+        raise IncorrectPasswordHTTPException
     response.set_cookie("access_token", access_token, httponly=True, samesite="lax")
     response.set_cookie(
         "refresh_token",
@@ -45,14 +81,24 @@ async def login(
     return {"status": "OK"}
 
 
-@router.post("/refresh")
+@router.post(
+    "/refresh",
+    response_model=StatusResponse,
+    responses=generate_responses(IncorrectTokenHTTPException),
+    summary="Обновление access-токена",
+)
 async def refresh(
     request: Request,
     response: Response,
     db: DBDep,
 ):
     raw_refresh = get_refresh_token(request)
-    new_access, new_refresh = await AuthService(db).refresh_access_token(raw_refresh)
+    try:
+        new_access, new_refresh = await AuthService(db).refresh_access_token(
+            raw_refresh
+        )
+    except IncorrectTokenException:
+        raise IncorrectTokenHTTPException
     response.set_cookie("access_token", new_access, httponly=True, samesite="lax")
     response.set_cookie(
         "refresh_token",
@@ -64,21 +110,34 @@ async def refresh(
     return {"status": "OK"}
 
 
-@router.post("/logout")
+@router.post(
+    "/logout",
+    response_model=StatusResponse,
+    responses=generate_responses(AlreadyLoggedOutHTTPException),
+    summary="Выход из аккаунта",
+)
 async def logout(
     request: Request,
     response: Response,
     db: DBDep,
 ):
     raw_refresh = request.cookies.get("refresh_token")
-    if raw_refresh:
-        await AuthService(db).logout_user(raw_refresh)
+
+    if not raw_refresh:
+        raise AlreadyLoggedOutHTTPException
+
+    await AuthService(db).logout_user(raw_refresh)
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
     return {"status": "OK"}
 
 
-@router.delete("/{user_id}", summary="Удаление аккаунта пользователя")
+@router.delete(
+    "/{user_id}",
+    response_model=StatusResponse,
+    responses=generate_responses(UserNotFoundHTTPException),
+    summary="Удаление аккаунта пользователя",
+)
 async def delete_user(
     db: DBDep,
     user_id: int,

@@ -29,6 +29,16 @@ class UserAlreadyExistsHTTPException(ObjectAlreadyExistsHTTPException):
     detail = "Пользователь с таким email или именем уже существует"
 
 
+class AlreadyAuthenticatedHTTPException(AIStudingHTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Вы уже авторизованы"
+
+
+class AlreadyLoggedOutHTTPException(AIStudingHTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Вы уже вышли из системы"
+
+
 class NoAccessTokenHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Отсутствует токен доступа"
