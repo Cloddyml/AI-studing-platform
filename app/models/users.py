@@ -9,6 +9,7 @@ from app.core.database import Base
 if typing.TYPE_CHECKING:
     from app.models import (
         AIInteractionsOrm,
+        RefreshTokensOrm,
         SolutionsOrm,
         SubmissionsOrm,
         UsersProgressesOrm,
@@ -49,6 +50,10 @@ class UsersOrm(Base):
         cascade="all, delete-orphan",
     )
     ai_interactions: Mapped[list["AIInteractionsOrm"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    refresh_tokens: Mapped[list["RefreshTokensOrm"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
     )

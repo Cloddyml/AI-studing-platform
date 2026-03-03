@@ -6,6 +6,7 @@ from app.models.topics import TopicsOrm
 from app.models.users import UsersOrm
 from app.models.users_progresses import UsersProgressesOrm
 from app.models.ai_interactions import AIInteractionsOrm
+from app.models.refresh_tokens import RefreshTokensOrm
 
 __all__ = [
     "UsersOrm",
@@ -16,4 +17,5 @@ __all__ = [
     "SolutionsOrm",
     "SubmissionsOrm",
     "AIInteractionsOrm",
+    "RefreshTokensOrm",
 ]
