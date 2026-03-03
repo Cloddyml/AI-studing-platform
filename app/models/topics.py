@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 if typing.TYPE_CHECKING:
-    from app.models import TasksOrm
+    from app.models import TasksOrm, UsersProgressesOrm
 
 
 class TopicsOrm(Base):
@@ -28,6 +28,10 @@ class TopicsOrm(Base):
     )
 
     tasks: Mapped[list["TasksOrm"]] = relationship(
+        back_populates="topic",
+        cascade="all, delete-orphan",
+    )
+    users_progresses: Mapped[list["UsersProgressesOrm"]] = relationship(
         back_populates="topic",
         cascade="all, delete-orphan",
     )

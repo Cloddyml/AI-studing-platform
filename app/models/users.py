@@ -1,9 +1,13 @@
+import typing
 from datetime import datetime
 
 from sqlalchemy import String, text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+
+if typing.TYPE_CHECKING:
+    from app.models import UsersProgressesOrm
 
 
 class UsersOrm(Base):
@@ -16,7 +20,7 @@ class UsersOrm(Base):
     )
     hashed_password: Mapped[str] = mapped_column(String(length=200), nullable=False)
     role: Mapped[str] = mapped_column(
-        String(length=20), server_default="student", nullable=False
+        String(length=20), server_default="'student'", nullable=False
     )
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, server_default=text("now()")
@@ -25,4 +29,9 @@ class UsersOrm(Base):
         nullable=False,
         server_default=text("now()"),
         onupdate=datetime.now,
+    )
+
+    users_progresses: Mapped[list["UsersProgressesOrm"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
