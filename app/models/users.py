@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 if typing.TYPE_CHECKING:
-    from app.models import UsersProgressesOrm
+    from app.models import SolutionsOrm, UsersProgressesOrm
 
 
 class UsersOrm(Base):
@@ -20,7 +20,7 @@ class UsersOrm(Base):
     )
     hashed_password: Mapped[str] = mapped_column(String(length=200), nullable=False)
     role: Mapped[str] = mapped_column(
-        String(length=20), server_default="'student'", nullable=False
+        String(length=20), server_default=text("'student'"), nullable=False
     )
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, server_default=text("now()")
@@ -32,6 +32,10 @@ class UsersOrm(Base):
     )
 
     users_progresses: Mapped[list["UsersProgressesOrm"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    solutions: Mapped[list["SolutionsOrm"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
     )
