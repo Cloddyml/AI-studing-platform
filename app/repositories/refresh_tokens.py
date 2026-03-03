@@ -17,10 +17,7 @@ class RefreshTokensRepository(BaseRepository):
         now = datetime.now(timezone.utc)
         query = (
             select(self.model)
-            .filter_by(
-                hashed_token=hashed_token,
-                revoked=False,
-            )
+            .filter_by(hashed_token=hashed_token, revoked=False)
             .where(self.model.expires_at > now)
         )
         result = await self.session.execute(query)
@@ -36,20 +33,7 @@ class RefreshTokensRepository(BaseRepository):
         )
         await self.session.execute(stmt)
 
-    async def revoke_all_user_tokens(self, user_id: int) -> None:
-        """Отозвать все токены пользователя (смена пароля / force logout)."""
-        stmt = (
-            update(self.model)
-            .filter_by(user_id=user_id, revoked=False)
-            .values(revoked=True)
-        )
-        await self.session.execute(stmt)
-
-    async def delete_expired_tokens(self, user_id: int) -> None:
-        """Удалить все истёкшие и отозванные токены пользователя."""
-        now = datetime.now(timezone.utc)
-        stmt = sa_delete(self.model).where(
-            self.model.user_id == user_id,
-            (self.model.expires_at < now) | (self.model.revoked == True),
-        )
+    async def delete_all_user_tokens(self, user_id: int) -> None:
+        """Удалить все токены пользователя (логин / ротация)."""
+        stmt = sa_delete(self.model).where(self.model.user_id == user_id)
         await self.session.execute(stmt)

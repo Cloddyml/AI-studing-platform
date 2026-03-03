@@ -27,7 +27,7 @@ class RefreshTokensOrm(Base):
         Boolean, nullable=False, server_default=text("false")
     )
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
     )
 
     user: Mapped["UsersOrm"] = relationship(back_populates="refresh_tokens")

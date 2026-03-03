@@ -91,8 +91,7 @@ class AuthService(BaseService):
         if not self.verify_password(data.password, user.hashed_password):
             raise IncorrectPasswordException
 
-        await self.db.refresh_tokens.revoke_all_user_tokens(user.id)
-        await self.db.refresh_tokens.delete_expired_tokens(user.id)
+        await self.db.refresh_tokens.delete_all_user_tokens(user.id)
 
         access_token = self.create_access_token({"user_id": user.id})
         raw_refresh = self._generate_refresh_token()
@@ -113,6 +112,8 @@ class AuthService(BaseService):
             raise IncorrectTokenException
 
         await self.db.refresh_tokens.revoke_token(hashed)
+        await self.db.refresh_tokens.delete_expired_tokens(token_record.user_id)
+
         new_access = self.create_access_token({"user_id": token_record.user_id})
         new_raw_refresh = self._generate_refresh_token()
         await self._save_refresh_token(token_record.user_id, new_raw_refresh)
