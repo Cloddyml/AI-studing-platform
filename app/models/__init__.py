@@ -1,3 +1,5 @@
+from app.models.ai_interactions import AIInteractionsOrm
+from app.models.refresh_tokens import RefreshTokensOrm
 from app.models.solutions import SolutionsOrm
 from app.models.submissions import SubmissionsOrm
 from app.models.task_tests import TaskTestsOrm
@@ -5,8 +7,6 @@ from app.models.tasks import TasksOrm
 from app.models.topics import TopicsOrm
 from app.models.users import UsersOrm
 from app.models.users_progresses import UsersProgressesOrm
-from app.models.ai_interactions import AIInteractionsOrm
-from app.models.refresh_tokens import RefreshTokensOrm
 
 __all__ = [
     "UsersOrm",
