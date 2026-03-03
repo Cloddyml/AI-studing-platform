@@ -6,6 +6,7 @@ from app.exceptions.excs import IncorrectTokenException
 from app.exceptions.http_excs import (
     IncorrectTokenHTTPException,
     NoAccessTokenHTTPException,
+    NoRefreshTokenHTTPException,
 )
 from app.services.auth import AuthService
 
@@ -20,7 +21,7 @@ def get_access_token(request: Request) -> str:
 def get_refresh_token(request: Request) -> str:
     token = request.cookies.get("refresh_token")
     if not token:
-        raise NoAccessTokenHTTPException
+        raise NoRefreshTokenHTTPException
     return token
 
 

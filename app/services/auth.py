@@ -60,7 +60,7 @@ class AuthService(BaseService):
         return hashlib.sha256(raw_token.encode()).hexdigest()
 
     async def _save_refresh_token(self, user_id: int, raw_token: str) -> None:
-        expires_at = datetime.utcnow() + timedelta(
+        expires_at = datetime.now(timezone.utc) + timedelta(
             days=settings.REFRESH_TOKEN_EXPIRE_DAYS
         )
         token_data = RefreshTokenAddDTO(
@@ -91,6 +91,9 @@ class AuthService(BaseService):
         if not self.verify_password(data.password, user.hashed_password):
             raise IncorrectPasswordException
 
+        await self.db.refresh_tokens.revoke_all_user_tokens(user.id)
+        await self.db.refresh_tokens.delete_expired_tokens(user.id)
+
         access_token = self.create_access_token({"user_id": user.id})
         raw_refresh = self._generate_refresh_token()
         await self._save_refresh_token(user.id, raw_refresh)
@@ -107,9 +110,6 @@ class AuthService(BaseService):
         token_record = await self.db.refresh_tokens.get_valid_token(hashed)
 
         if token_record is None:
-            raise IncorrectTokenException
-
-        if token_record.expires_at < datetime.utcnow():
             raise IncorrectTokenException
 
         await self.db.refresh_tokens.revoke_token(hashed)
