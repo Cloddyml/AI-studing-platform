@@ -25,14 +25,6 @@ class UserAlreadyExistsException(AIStuding):
     detail = "Пользователь с таким email или именем уже существует"
 
 
-class AlreadyAuthenticatedException(AIStuding):
-    detail = "Пользователь уже авторизован"
-
-
-class AlreadyLoggedOutException(Exception):
-    detail = "Пользователь уже вышел"
-
-
 class EmailNotRegisteredException(AIStuding):
     detail = "Пользователь с таким email не зарегистрирован"
 
@@ -43,7 +35,3 @@ class IncorrectPasswordException(AIStuding):
 
 class IncorrectTokenException(AIStuding):
     detail = "Токен недействителен или истёк"
-
-
-class TokenRevokedException(AIStuding):
-    detail = "Токен был отозван"
