@@ -14,9 +14,19 @@ class ObjectNotFoundHTTPException(AIStudingHTTPException):
     detail = "Объект не найден"
 
 
+class UserNotFoundHTTPException(ObjectNotFoundHTTPException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Пользователь не найден"
+
+
 class ObjectAlreadyExistsHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Объект уже существует"
+
+
+class UserAlreadyExistsHTTPException(ObjectAlreadyExistsHTTPException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Пользователь с таким email или именем уже существует"
 
 
 class NoAccessTokenHTTPException(AIStudingHTTPException):
@@ -32,16 +42,6 @@ class NoRefreshTokenHTTPException(AIStudingHTTPException):
 class IncorrectTokenHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Токен недействителен или истёк"
-
-
-class UserAlreadyExistsHTTPException(AIStudingHTTPException):
-    status_code = status.HTTP_409_CONFLICT
-    detail = "Пользователь с таким email или именем уже существует"
-
-
-class UserNotFoundHTTPException(AIStudingHTTPException):
-    status_code = status.HTTP_404_NOT_FOUND
-    detail = "Пользователь не найден"
 
 
 class EmailNotRegisteredHTTPException(AIStudingHTTPException):
