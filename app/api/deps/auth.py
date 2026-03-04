@@ -39,7 +39,10 @@ def get_current_user_role(access_token: str = Depends(get_access_token)) -> str:
         data = AuthService().decode_token(access_token)
     except IncorrectTokenException:
         raise IncorrectTokenHTTPException
-    return data["role"]
+    role = data.get("role")
+    if role is None:
+        raise IncorrectTokenHTTPException
+    return role
 
 
 def require_admin(role: str = Depends(get_current_user_role)) -> None:

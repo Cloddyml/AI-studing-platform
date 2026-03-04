@@ -17,6 +17,7 @@ from app.exceptions.http_excs import (
     EmailNotRegisteredHTTPException,
     IncorrectPasswordHTTPException,
     IncorrectTokenHTTPException,
+    InsufficientPermissionsHTTPException,
     UserAlreadyExistsHTTPException,
     UserNotFoundHTTPException,
 )
@@ -135,14 +136,17 @@ async def logout(
 @router.delete(
     "/{user_id}",
     response_model=StatusResponse,
-    responses=generate_responses(UserNotFoundHTTPException),
+    responses=generate_responses(
+        InsufficientPermissionsHTTPException,
+        UserNotFoundHTTPException,
+    ),
     summary="Удаление аккаунта пользователя",
     tags=["Для администраторов"],
 )
 async def delete_user(
     db: DBDep,
     user_id: int,
-    adminDep: AdminDep,
+    _: AdminDep,
 ):
     try:
         await AuthService(db).delete_user(user_id=user_id)
