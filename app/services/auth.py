@@ -112,6 +112,8 @@ class AuthService(BaseService):
             raise IncorrectTokenException
 
         user = await self.db.users.get_user_by_id(token_record.user_id)
+        if user is None:
+            raise IncorrectTokenException
 
         await self.db.refresh_tokens.delete_all_user_tokens(token_record.user_id)
 
