@@ -62,3 +62,8 @@ class EmailNotRegisteredHTTPException(AIStudingHTTPException):
 class IncorrectPasswordHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Неверный email или пароль"
+
+
+class InsufficientPermissionsHTTPException(AIStudingHTTPException):
+    status_code = status.HTTP_403_FORBIDDEN
+    detail = "Недостаточно прав для выполнения операции"

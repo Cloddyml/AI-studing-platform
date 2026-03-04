@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Response, status
 
-from app.api.deps.auth import get_refresh_token
+from app.api.deps.auth import AdminDep, get_refresh_token
 from app.api.deps.db import DBDep
 from app.api.responses import generate_responses
 from app.core.config import settings
@@ -137,10 +137,12 @@ async def logout(
     response_model=StatusResponse,
     responses=generate_responses(UserNotFoundHTTPException),
     summary="Удаление аккаунта пользователя",
+    tags=["Для администраторов"],
 )
 async def delete_user(
     db: DBDep,
     user_id: int,
+    adminDep: AdminDep,
 ):
     try:
         await AuthService(db).delete_user(user_id=user_id)

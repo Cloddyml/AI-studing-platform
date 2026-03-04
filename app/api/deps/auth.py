@@ -5,6 +5,7 @@ from fastapi import Depends, Request
 from app.exceptions.excs import IncorrectTokenException
 from app.exceptions.http_excs import (
     IncorrectTokenHTTPException,
+    InsufficientPermissionsHTTPException,
     NoAccessTokenHTTPException,
     NoRefreshTokenHTTPException,
 )
@@ -33,4 +34,18 @@ def get_current_user_id(access_token: str = Depends(get_access_token)) -> int:
     return data["user_id"]
 
 
+def get_current_user_role(access_token: str = Depends(get_access_token)) -> str:
+    try:
+        data = AuthService().decode_token(access_token)
+    except IncorrectTokenException:
+        raise IncorrectTokenHTTPException
+    return data["role"]
+
+
+def require_admin(role: str = Depends(get_current_user_role)) -> None:
+    if role != "admin":
+        raise InsufficientPermissionsHTTPException
+
+
 UserIdDep = Annotated[int, Depends(get_current_user_id)]
+AdminDep = Annotated[None, Depends(require_admin)]

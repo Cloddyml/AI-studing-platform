@@ -93,7 +93,7 @@ class AuthService(BaseService):
 
         await self.db.refresh_tokens.delete_all_user_tokens(user.id)
 
-        access_token = self.create_access_token({"user_id": user.id})
+        access_token = self.create_access_token({"user_id": user.id, "role": user.role})
         raw_refresh = self._generate_refresh_token()
         await self._save_refresh_token(user.id, raw_refresh)
         await self.db.commit()

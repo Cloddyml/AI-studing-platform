@@ -28,6 +28,7 @@ class UserDTO(BaseModel):
 
 class UserWithHashedPasswordDTO(UserDTO):
     hashed_password: str
+    role: str
 
 
 class UserLoginDTO(BaseModel):
