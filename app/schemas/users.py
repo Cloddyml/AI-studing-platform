@@ -20,10 +20,21 @@ class UserAddDTO(BaseModel):
     hashed_password: str
 
 
-class UserDTO(BaseModel):
-    id: int
+class UserUpdateRequestDTO(BaseModel):
     email: EmailStr
     username: str
+
+
+class UserDTO(UserUpdateRequestDTO):
+    id: int
+
+
+class UserPasswordOnlyDTO(BaseModel):
+    password: str
+
+
+class UserHashedPasswordOnlyDTO(BaseModel):
+    hashed_password: str
 
 
 class UserWithHashedPasswordDTO(UserDTO):

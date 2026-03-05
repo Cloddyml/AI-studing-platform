@@ -3,7 +3,6 @@ import secrets
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from pwdlib import PasswordHash
 
 from app.core.config import settings
 from app.exceptions.excs import (
@@ -18,17 +17,10 @@ from app.exceptions.excs import (
 from app.schemas.refresh_tokens import RefreshTokenAddDTO
 from app.schemas.users import UserAddDTO, UserLoginDTO, UserRequestAddDTO
 from app.services.base import BaseService
+from app.services.utils import hash_password, verify_password
 
 
 class AuthService(BaseService):
-    pwd_context = PasswordHash.recommended()
-
-    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        return self.pwd_context.verify(plain_password, hashed_password)
-
-    def hash_password(self, password: str) -> str:
-        return self.pwd_context.hash(password)
-
     def create_access_token(self, data: dict) -> str:
         expire = datetime.now(timezone.utc) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
@@ -71,7 +63,7 @@ class AuthService(BaseService):
         await self.db.refresh_tokens.add(token_data)
 
     async def register_user(self, data: UserRequestAddDTO) -> None:
-        hashed_password = self.hash_password(data.password)
+        hashed_password = hash_password(data.password)
         new_user_data = UserAddDTO(
             email=data.email,
             username=data.username,
@@ -88,7 +80,7 @@ class AuthService(BaseService):
         user = await self.db.users.get_user_with_hashed_password(email=data.email)
         if not user:
             raise EmailNotRegisteredException
-        if not self.verify_password(data.password, user.hashed_password):
+        if not verify_password(data.password, user.hashed_password):
             raise IncorrectPasswordException
 
         await self.db.refresh_tokens.delete_all_user_tokens(user.id)
