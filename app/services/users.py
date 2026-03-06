@@ -1,9 +1,7 @@
 from app.exceptions.excs import (
-    EmptyUpdateDataException,
     ObjectNotFoundException,
     UserNotFoundException,
 )
-from app.exceptions.http_excs import EmptyUpdateDataHTTPException
 from app.schemas.users import (
     UserHashedPasswordOnlyDTO,
     UserPasswordOnlyDTO,
