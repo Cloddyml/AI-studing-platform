@@ -67,3 +67,8 @@ class IncorrectPasswordHTTPException(AIStudingHTTPException):
 class InsufficientPermissionsHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_403_FORBIDDEN
     detail = "Недостаточно прав для выполнения операции"
+
+
+class EmptyUpdateDataHTTPException(AIStudingHTTPException):
+    status_code = status.HTTP_406_NOT_ACCEPTABLE
+    detail = "Нет данных для обновления"

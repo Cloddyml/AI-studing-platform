@@ -20,17 +20,26 @@ class UserAddDTO(BaseModel):
     hashed_password: str
 
 
-class UserUpdateRequestDTO(BaseModel):
+class UserUpdateRequestPatchDTO(BaseModel):
+    email: EmailStr | None = None
+    username: str | None = None
+
+
+class UserDTO(BaseModel):
     email: EmailStr
     username: str
-
-
-class UserDTO(UserUpdateRequestDTO):
     id: int
 
 
 class UserPasswordOnlyDTO(BaseModel):
     password: str
+
+    @field_validator("password")
+    @classmethod
+    def password_not_empty(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("Пароль не может быть пустым")
+        return v
 
 
 class UserHashedPasswordOnlyDTO(BaseModel):

@@ -1,7 +1,9 @@
+from app.exceptions.excs import EmptyUpdateDataException
+from app.exceptions.http_excs import EmptyUpdateDataHTTPException
 from app.schemas.users import (
     UserHashedPasswordOnlyDTO,
     UserPasswordOnlyDTO,
-    UserUpdateRequestDTO,
+    UserUpdateRequestPatchDTO,
 )
 from app.services.base import BaseService
 from app.services.utils import hash_password
@@ -11,10 +13,13 @@ class UsersService(BaseService):
     async def partial_update_user(
         self,
         user_id: int,
-        user_data: UserUpdateRequestDTO,
+        user_data: UserUpdateRequestPatchDTO,
     ):
-        await self.db.users.edit(user_data, exclude_unset=True, id=user_id)
-        await self.db.commit()
+        try:
+            await self.db.users.edit(user_data, exclude_unset=True, id=user_id)
+            await self.db.commit()
+        except EmptyUpdateDataException:
+            raise EmptyUpdateDataHTTPException
 
     async def update_user_password(
         self,
