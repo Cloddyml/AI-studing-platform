@@ -3,8 +3,9 @@ from fastapi import APIRouter, status
 from app.api.deps.auth import UserIdDep
 from app.api.deps.db import DBDep
 from app.api.responses import generate_responses
-from app.exceptions.excs import UserNotFoundException
+from app.exceptions.excs import EmptyUpdateDataException, UserNotFoundException
 from app.exceptions.http_excs import (
+    EmptyUpdateDataHTTPException,
     UserNotFoundHTTPException,
 )
 from app.schemas.errors import StatusResponse
@@ -19,6 +20,7 @@ router = APIRouter(prefix="/users", tags=["Пользователи"])
     response_model=StatusResponse,
     status_code=status.HTTP_200_OK,
     responses=generate_responses(
+        EmptyUpdateDataHTTPException,
         UserNotFoundHTTPException,
     ),
     summary="Частичное обновление профиля пользователя",
@@ -28,6 +30,8 @@ async def partial_update_user(
 ):
     try:
         await UsersService(db).partial_update_user(user_id=user_id, user_data=user_data)
+    except EmptyUpdateDataException:
+        raise EmptyUpdateDataHTTPException
     except UserNotFoundException:
         raise UserNotFoundHTTPException
     return {"status": "OK"}
