@@ -1,4 +1,8 @@
-from app.exceptions.excs import EmptyUpdateDataException
+from app.exceptions.excs import (
+    EmptyUpdateDataException,
+    ObjectNotFoundException,
+    UserNotFoundException,
+)
 from app.exceptions.http_excs import EmptyUpdateDataHTTPException
 from app.schemas.users import (
     UserHashedPasswordOnlyDTO,
@@ -18,8 +22,8 @@ class UsersService(BaseService):
         try:
             await self.db.users.edit(user_data, exclude_unset=True, id=user_id)
             await self.db.commit()
-        except EmptyUpdateDataException:
-            raise EmptyUpdateDataHTTPException
+        except ObjectNotFoundException:
+            raise UserNotFoundException
 
     async def update_user_password(
         self,
@@ -29,7 +33,10 @@ class UsersService(BaseService):
         user_hashed_password_data = UserHashedPasswordOnlyDTO(
             hashed_password=hash_password(password=user_password_data.password)
         )
-        await self.db.users.edit(
-            user_hashed_password_data, exclude_unset=True, id=user_id
-        )
-        await self.db.commit()
+        try:
+            await self.db.users.edit(
+                user_hashed_password_data, exclude_unset=True, id=user_id
+            )
+            await self.db.commit()
+        except ObjectNotFoundException:
+            raise UserNotFoundException
