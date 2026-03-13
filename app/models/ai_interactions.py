@@ -2,6 +2,7 @@ import typing
 from datetime import datetime
 
 from sqlalchemy import (
+    DateTime,
     ForeignKey,
     Integer,
     String,
@@ -34,7 +35,7 @@ class AIInteractionsOrm(Base):
     ai_response: Mapped[str | None] = mapped_column(Text, nullable=True)
     response_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
     )
 
     user: Mapped["UsersOrm"] = relationship(back_populates="ai_interactions")

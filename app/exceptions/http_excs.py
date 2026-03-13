@@ -85,5 +85,5 @@ class InsufficientPermissionsHTTPException(AIStudingHTTPException):
 
 
 class EmptyUpdateDataHTTPException(AIStudingHTTPException):
-    status_code = status.HTTP_406_NOT_ACCEPTABLE
+    status_code = status.HTTP_422_UNPROCESSABLE_CONTENT
     detail = "Нет данных для обновления"

@@ -31,6 +31,7 @@ class AuthService(BaseService):
             algorithm=settings.JWT_ALGORITHM,
         )
 
+    @staticmethod
     def decode_token(self, token: str) -> dict:
         try:
             return jwt.decode(

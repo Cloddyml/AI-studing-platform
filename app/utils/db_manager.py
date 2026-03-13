@@ -1,3 +1,5 @@
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
 from app.repositories.ai_interactions import AIInteractionsRepository
 from app.repositories.refresh_tokens import RefreshTokensRepository
 from app.repositories.solutions import SolutionsRepository
@@ -9,7 +11,7 @@ from app.repositories.users_progresses import UsersProgressesRepository
 
 
 class DBManager:
-    def __init__(self, session_factory):
+    def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self.session_factory = session_factory
 
     async def __aenter__(self):

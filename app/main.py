@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import routers
 from app.core.config import settings
 from app.core.database import engine
-from app.exceptions.http_excs import AIStudingHTTPException
 
 
 @asynccontextmanager
@@ -32,16 +31,6 @@ app.add_middleware(
 
 for router in routers:
     app.include_router(router, prefix=f"/api/{settings.API_VERSION}")
-
-
-@app.exception_handler(AIStudingHTTPException)
-async def app_exception_handler(request, exc: AIStudingHTTPException):
-    from fastapi.responses import JSONResponse
-
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={"detail": exc.detail},
-    )
 
 
 def main():

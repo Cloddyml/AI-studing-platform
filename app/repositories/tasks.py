@@ -8,6 +8,7 @@ from app.schemas.tasks import TaskBriefDTO, TaskDetailDTO
 
 class TasksRepository(BaseRepository):
     model = TasksOrm
+    mapper = TaskBriefDataMapper
     brief_mapper = TaskBriefDataMapper
     detail_mapper = TaskDetailDataMapper
 
