@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
-    MODE: Literal["TEST", "LOCAL"]
+    MODE: Literal["TEST", "LOCAL", "PROD"]
 
     DB_HOST: str
     DB_PORT: int

@@ -1,8 +1,9 @@
 import typing
 from datetime import datetime
 
-from sqlalchemy import String, text
+from sqlalchemy import DateTime, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.schema import FetchedValue
 
 from app.core.database import Base
 
@@ -29,12 +30,13 @@ class UsersOrm(Base):
         String(length=20), server_default=text("'student'"), nullable=False
     )
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
     )
     updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
         nullable=False,
         server_default=text("now()"),
-        onupdate=datetime.now,
+        server_onupdate=FetchedValue(),
     )
 
     users_progresses: Mapped[list["UsersProgressesOrm"]] = relationship(

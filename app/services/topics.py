@@ -17,5 +17,5 @@ class TopicsService(BaseService):
     async def get_tasks_by_topic(self, topic_id: int) -> list[TaskBriefDTO]:
         topic = await self.db.topics.get_published_by_id(topic_id)
         if topic is None:
-            raise TaskNotFoundException
+            raise TopicNotFoundException
         return await self.db.tasks.get_published_by_topic(topic_id)

@@ -1,7 +1,7 @@
 import typing
 from datetime import datetime
 
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Text, text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -40,7 +40,7 @@ class TasksOrm(Base):
         Boolean, nullable=False, server_default=text("false")
     )
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
     )
 
     topic: Mapped["TopicsOrm"] = relationship(back_populates="tasks")

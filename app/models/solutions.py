@@ -1,7 +1,15 @@
 import typing
 from datetime import datetime
 
-from sqlalchemy import Boolean, ForeignKey, Integer, Text, UniqueConstraint, text
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -28,7 +36,7 @@ class SolutionsOrm(Base):
         Boolean, nullable=False, server_default=text("false")
     )
     solved_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
     )
 
     user: Mapped["UsersOrm"] = relationship(back_populates="solutions")

@@ -1,7 +1,7 @@
 import typing
 from datetime import datetime
 
-from sqlalchemy import Boolean, ForeignKey, Integer, UniqueConstraint, text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -31,7 +31,7 @@ class UsersProgressesOrm(Base):
         Boolean, nullable=False, server_default=text("false")
     )
     completed_at: Mapped[datetime | None] = mapped_column(
-        nullable=True,
+        DateTime(timezone=True), nullable=True
     )
 
     user: Mapped["UsersOrm"] = relationship(back_populates="users_progresses")

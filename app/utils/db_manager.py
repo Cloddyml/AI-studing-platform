@@ -1,8 +1,10 @@
 from app.repositories.refresh_tokens import RefreshTokensRepository
 from app.repositories.solutions import SolutionsRepository
+from app.repositories.submissions import SubmissionsRepository
 from app.repositories.tasks import TasksRepository
 from app.repositories.topics import TopicsRepository
 from app.repositories.users import UsersRepository
+from app.repositories.users_progresses import UsersProgressesRepository
 
 
 class DBManager:
@@ -16,6 +18,8 @@ class DBManager:
         self.topics = TopicsRepository(self.session)
         self.tasks = TasksRepository(self.session)
         self.solutions = SolutionsRepository(self.session)
+        self.submissions = SubmissionsRepository(self.session)
+        self.users_progresses = UsersProgressesRepository(self.session)
 
         return self
 

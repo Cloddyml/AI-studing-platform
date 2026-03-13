@@ -32,7 +32,7 @@ class AIInteractionsOrm(Base):
     interaction_type: Mapped[str] = mapped_column(String(length=30), nullable=False)
     user_message: Mapped[str | None] = mapped_column(Text, nullable=True)
     ai_response: Mapped[str | None] = mapped_column(Text, nullable=True)
-    response_time: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    response_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, server_default=text("now()")
     )

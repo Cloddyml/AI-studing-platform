@@ -63,14 +63,21 @@ async def login(
     response: Response,
     db: DBDep,
 ):
-    if request.cookies.get("access_token"):
-        raise AlreadyAuthenticatedHTTPException
+    raw_access = request.cookies.get("access_token")
+    if raw_access:
+        try:
+            AuthService().decode_token(raw_access)
+            raise AlreadyAuthenticatedHTTPException
+        except IncorrectTokenException:
+            pass
+
     try:
         access_token, refresh_token = await AuthService(db).login_user(data)
     except EmailNotRegisteredException:
         raise EmailNotRegisteredHTTPException
     except IncorrectPasswordException:
         raise IncorrectPasswordHTTPException
+
     response.set_cookie("access_token", access_token, httponly=True, samesite="lax")
     response.set_cookie(
         "refresh_token",
