@@ -1,3 +1,4 @@
+from app.repositories.ai_interactions import AIInteractionsRepository
 from app.repositories.refresh_tokens import RefreshTokensRepository
 from app.repositories.solutions import SolutionsRepository
 from app.repositories.submissions import SubmissionsRepository
@@ -20,6 +21,7 @@ class DBManager:
         self.solutions = SolutionsRepository(self.session)
         self.submissions = SubmissionsRepository(self.session)
         self.users_progresses = UsersProgressesRepository(self.session)
+        self.ai_interactions = AIInteractionsRepository(self.session)
 
         return self
 

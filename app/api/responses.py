@@ -18,5 +18,8 @@ def generate_responses(*exc_classes: type[AIStudingHTTPException]) -> dict:
             "summary": exc_cls.detail,
             "value": {"detail": exc_cls.detail},
         }
-        entry["description"] = exc_cls.detail
+        if entry["description"]:
+            entry["description"] += f" / {exc_cls.detail}"
+        else:
+            entry["description"] = exc_cls.detail
     return result

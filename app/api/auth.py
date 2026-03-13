@@ -78,13 +78,20 @@ async def login(
     except IncorrectPasswordException:
         raise IncorrectPasswordHTTPException
 
-    response.set_cookie("access_token", access_token, httponly=True, samesite="lax")
+    response.set_cookie(
+        "access_token",
+        access_token,
+        httponly=True,
+        samesite="lax",
+        secure=settings.COOKIE_SECURE,
+    )
     response.set_cookie(
         "refresh_token",
         refresh_token,
         httponly=True,
         samesite="lax",
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+        secure=settings.COOKIE_SECURE,
     )
     return {"status": "OK"}
 
@@ -107,13 +114,20 @@ async def refresh(
         )
     except IncorrectTokenException:
         raise IncorrectTokenHTTPException
-    response.set_cookie("access_token", new_access, httponly=True, samesite="lax")
+    response.set_cookie(
+        "access_token",
+        new_access,
+        httponly=True,
+        samesite="lax",
+        secure=settings.COOKIE_SECURE,
+    )
     response.set_cookie(
         "refresh_token",
         new_refresh,
         httponly=True,
         samesite="lax",
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+        secure=settings.COOKIE_SECURE,
     )
     return {"status": "OK"}
 

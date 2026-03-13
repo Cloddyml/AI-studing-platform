@@ -1,11 +1,6 @@
-from sqlalchemy import select
-
 from app.models.users import UsersOrm
 from app.repositories.base import BaseRepository
-from app.repositories.mappers.mappers import (
-    UserDataMapper,
-    UserWithHashedPasswordDataMapper,
-)
+from app.repositories.mappers.mappers import UserWithHashedPasswordDataMapper
 from app.schemas.users import UserWithHashedPasswordDTO
 
 
