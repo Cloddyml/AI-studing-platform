@@ -1,4 +1,7 @@
 from app.repositories.refresh_tokens import RefreshTokensRepository
+from app.repositories.solutions import SolutionsRepository
+from app.repositories.tasks import TasksRepository
+from app.repositories.topics import TopicsRepository
 from app.repositories.users import UsersRepository
 
 
@@ -10,6 +13,9 @@ class DBManager:
         self.session = self.session_factory()
         self.users = UsersRepository(self.session)
         self.refresh_tokens = RefreshTokensRepository(self.session)
+        self.topics = TopicsRepository(self.session)
+        self.tasks = TasksRepository(self.session)
+        self.solutions = SolutionsRepository(self.session)
 
         return self
 

@@ -13,16 +13,28 @@ class UserNotFoundException(ObjectNotFoundException):
     detail = "Пользователь не найден"
 
 
+class TopicNotFoundException(ObjectNotFoundException):
+    detail = "Тема не найдена"
+
+
+class TaskNotFoundException(ObjectNotFoundException):
+    detail = "Задача не найдена"
+
+
+class SolutionNotFoundException(ObjectNotFoundException):
+    detail = "Решение не найдено"
+
+
 class ObjectAlreadyExistsException(AIStuding):
     detail = "Объект уже существует"
 
 
+class UserAlreadyExistsException(ObjectAlreadyExistsException):
+    detail = "Пользователь с таким email или именем уже существует"
+
+
 class EmptyUpdateDataException(AIStuding):
     detail = "Нет данных для обновления"
-
-
-class UserAlreadyExistsException(AIStuding):
-    detail = "Пользователь с таким email или именем уже существует"
 
 
 class EmailNotRegisteredException(AIStuding):

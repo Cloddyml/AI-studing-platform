@@ -19,6 +19,21 @@ class UserNotFoundHTTPException(ObjectNotFoundHTTPException):
     detail = "Пользователь не найден"
 
 
+class TopicNotFoundHTTPException(ObjectNotFoundHTTPException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Тема не найдена"
+
+
+class TaskNotFoundHTTPException(ObjectNotFoundHTTPException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Задача не найдена"
+
+
+class SolutionNotFoundHTTPException(ObjectNotFoundHTTPException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Решение не найдено"
+
+
 class ObjectAlreadyExistsHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Объект уже существует"
