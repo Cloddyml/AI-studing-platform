@@ -1,10 +1,10 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
 class UserRequestAddDTO(BaseModel):
     email: EmailStr
-    username: str
-    password: str
+    username: str = Field(min_length=3, max_length=31, pattern=r"^[a-zA-Z0-9_]+$")
+    password: str = Field(min_length=8)
 
     @field_validator("password")
     @classmethod
@@ -22,7 +22,7 @@ class UserAddDTO(BaseModel):
 
 class UserUpdateRequestPatchDTO(BaseModel):
     email: EmailStr | None = None
-    username: str | None = None
+    username: str = Field(min_length=3, max_length=31, pattern=r"^[a-zA-Z0-9_]+$")
 
 
 class UserDTO(BaseModel):

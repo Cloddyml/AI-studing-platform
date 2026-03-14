@@ -1,4 +1,4 @@
-from app.exceptions.excs import TaskNotFoundException, TopicNotFoundException
+from app.exceptions.excs import TopicNotFoundException
 from app.schemas.tasks import TaskBriefDTO
 from app.schemas.topics import TopicDetailDTO, TopicDTO
 from app.services.base import BaseService

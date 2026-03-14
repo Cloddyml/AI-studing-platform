@@ -1,3 +1,4 @@
+from app.models.ai_interactions import AIInteractionsOrm
 from app.models.refresh_tokens import RefreshTokensOrm
 from app.models.solutions import SolutionsOrm
 from app.models.submissions import SubmissionsOrm
@@ -6,6 +7,7 @@ from app.models.topics import TopicsOrm
 from app.models.users import UsersOrm
 from app.models.users_progresses import UsersProgressesOrm
 from app.repositories.mappers.base import DataMapper
+from app.schemas.ai_interactions import AIInteractionDTO
 from app.schemas.refresh_tokens import RefreshTokenDTO
 from app.schemas.solutions import SolutionDTO
 from app.schemas.submissions import SubmissionDTO
@@ -63,3 +65,8 @@ class SubmissionDataMapper(DataMapper):
 class UserProgressDataMapper(DataMapper):
     db_model = UsersProgressesOrm
     schema = UserProgressDTO
+
+
+class AIInteractionDataMapper(DataMapper):
+    db_model = AIInteractionsOrm
+    schema = AIInteractionDTO

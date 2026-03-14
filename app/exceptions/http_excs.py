@@ -87,3 +87,8 @@ class InsufficientPermissionsHTTPException(AIStudingHTTPException):
 class EmptyUpdateDataHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_422_UNPROCESSABLE_CONTENT
     detail = "Нет данных для обновления"
+
+
+class AIServiceHTTPException(AIStudingHTTPException):
+    status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    detail = "Ошибка AI-сервиса. Попробуйте позже"

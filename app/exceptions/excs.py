@@ -47,3 +47,7 @@ class IncorrectPasswordException(AIStuding):
 
 class IncorrectTokenException(AIStuding):
     detail = "Токен недействителен или истёк"
+
+
+class AIServiceException(AIStuding):
+    detail = "Ошибка AI-сервиса. Попробуйте позже"

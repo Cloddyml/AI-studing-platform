@@ -31,7 +31,10 @@ def get_current_user_id(access_token: str = Depends(get_access_token)) -> int:
         data = AuthService.decode_token(access_token)
     except IncorrectTokenException:
         raise IncorrectTokenHTTPException
-    return data["user_id"]
+    user_id = data.get("user_id")
+    if user_id is None:
+        raise IncorrectTokenHTTPException
+    return user_id
 
 
 def get_current_user_role(access_token: str = Depends(get_access_token)) -> str:
