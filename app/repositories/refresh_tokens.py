@@ -37,3 +37,8 @@ class RefreshTokensRepository(BaseRepository):
         """Удалить все токены пользователя (логин / ротация)."""
         stmt = sa_delete(self.model).where(self.model.user_id == user_id)
         await self.session.execute(stmt)
+
+    async def delete_token(self, hashed_token: str) -> None:
+        """Удалить конкретный токен (logout)."""
+        stmt = sa_delete(self.model).filter_by(hashed_token=hashed_token)
+        await self.session.execute(stmt)

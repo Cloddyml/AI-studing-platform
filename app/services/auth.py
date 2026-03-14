@@ -21,7 +21,8 @@ from app.services.utils import hash_password, verify_password
 
 
 class AuthService(BaseService):
-    def create_access_token(self, data: dict) -> str:
+    @staticmethod
+    def create_access_token(data: dict) -> str:
         expire = datetime.now(timezone.utc) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
@@ -32,7 +33,7 @@ class AuthService(BaseService):
         )
 
     @staticmethod
-    def decode_token(self, token: str) -> dict:
+    def decode_token(token: str) -> dict:
         try:
             return jwt.decode(
                 token,
@@ -86,7 +87,9 @@ class AuthService(BaseService):
 
         await self.db.refresh_tokens.delete_all_user_tokens(user.id)
 
-        access_token = self.create_access_token({"user_id": user.id, "role": user.role})
+        access_token = AuthService.create_access_token(
+            {"user_id": user.id, "role": user.role}
+        )
         raw_refresh = self._generate_refresh_token()
         await self._save_refresh_token(user.id, raw_refresh)
         await self.db.commit()
@@ -110,7 +113,7 @@ class AuthService(BaseService):
 
         await self.db.refresh_tokens.delete_all_user_tokens(token_record.user_id)
 
-        new_access = self.create_access_token(
+        new_access = AuthService.create_access_token(
             {
                 "user_id": token_record.user_id,
                 "role": user.role,

@@ -33,7 +33,7 @@ class SolutionsOrm(Base):
     )
     code: Mapped[str] = mapped_column(Text, nullable=False)
     is_tests_passed: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, server_default=text("false")
+        Boolean, nullable=False, server_default=text("true")
     )
     solved_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=text("now()")
