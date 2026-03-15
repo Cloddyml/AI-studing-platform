@@ -34,6 +34,11 @@ class SolutionNotFoundHTTPException(ObjectNotFoundHTTPException):
     detail = "Решение не найдено"
 
 
+class SubmissionNotFoundHTTPException(ObjectNotFoundHTTPException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Попытка выполнения не найдена"
+
+
 class ObjectAlreadyExistsHTTPException(AIStudingHTTPException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Объект уже существует"

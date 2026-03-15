@@ -53,7 +53,7 @@ class UsersOrm(Base):
     )
     ai_interactions: Mapped[list["AIInteractionsOrm"]] = relationship(
         back_populates="user",
-        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
     refresh_tokens: Mapped[list["RefreshTokensOrm"]] = relationship(
         back_populates="user",

@@ -2,6 +2,7 @@ from app.models.ai_interactions import AIInteractionsOrm
 from app.models.refresh_tokens import RefreshTokensOrm
 from app.models.solutions import SolutionsOrm
 from app.models.submissions import SubmissionsOrm
+from app.models.task_tests import TaskTestsOrm
 from app.models.tasks import TasksOrm
 from app.models.topics import TopicsOrm
 from app.models.users import UsersOrm
@@ -11,6 +12,7 @@ from app.schemas.ai_interactions import AIInteractionDTO
 from app.schemas.refresh_tokens import RefreshTokenDTO
 from app.schemas.solutions import SolutionDTO
 from app.schemas.submissions import SubmissionDTO
+from app.schemas.task_tests import TaskTestDTO
 from app.schemas.tasks import TaskBriefDTO, TaskDetailDTO
 from app.schemas.topics import TopicDetailDTO, TopicDTO
 from app.schemas.users import UserDTO, UserWithHashedPasswordDTO
@@ -50,6 +52,11 @@ class TaskBriefDataMapper(DataMapper):
 class TaskDetailDataMapper(DataMapper):
     db_model = TasksOrm
     schema = TaskDetailDTO
+
+
+class TaskTestDataMapper(DataMapper):
+    db_model = TaskTestsOrm
+    schema = TaskTestDTO
 
 
 class SolutionDataMapper(DataMapper):

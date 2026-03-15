@@ -25,6 +25,10 @@ class SolutionNotFoundException(ObjectNotFoundException):
     detail = "Решение не найдено"
 
 
+class SubmissionNotFoundException(ObjectNotFoundException):
+    detail = "Попытка выполнения не найдена"
+
+
 class ObjectAlreadyExistsException(AIStuding):
     detail = "Объект уже существует"
 

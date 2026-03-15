@@ -1,20 +1,10 @@
-from contextlib import asynccontextmanager
-
-import httpx
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import routers
 from app.core.config import settings
-from app.core.database import engine
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-    await engine.dispose()
-
+from app.core.lifespan import lifespan
 
 app = FastAPI(
     lifespan=lifespan,
